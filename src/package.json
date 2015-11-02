@@ -16,7 +16,8 @@
     "promise": "^6.0.1",
     "request": "^2.48.0",
     "semver": "^4.1.0",
-    "ws": "^0.6.2"
+    "ws": "^0.6.2",
+    "lgtv": "^0.2.2"
   },
   "window": {
     "title": "Pullover",
