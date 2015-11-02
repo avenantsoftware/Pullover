@@ -7,6 +7,7 @@ var obs = require('obs');
 var gui = require('nw.gui');
 var path = require('path');
 var http = require('https');
+var lgtv = require('lgtv');
 var debug = require('./lib/debug')('App');
 var semver = require('semver');
 var moment = require('moment');
@@ -136,6 +137,20 @@ function notify(title, text, url, iconPath) {
 	} else {
 		nativeNotify(title, text, url, iconPath);
 	}
+}
+
+// Show float message on LG Webos TV function
+// Usage: lgfloat('Message Title', 'Message Text');
+function lgfloat(title, text) {
+    lgtv.connect("192.168.2.6", function(err, response) {
+        if (!err) {
+            lgtv.show_float(title + " - " + text, function(err, response) {
+            if (!err) {
+                lgtv.disconnect();
+                }
+            });
+        }
+    });
 }
 
 /**
@@ -402,6 +417,7 @@ function getMessages() {
 			var iconPath = 'https://api.pushover.net/icons/' + message.icon + '.png';
 			setTimeout(function() {
 				notify(title, message.message, url, iconPath, true);
+				lgfloat(title, message.message);
 			}, notifyTimeout * index);
 		});
 		// Acknowledge receiving messages
