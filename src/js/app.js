@@ -8,6 +8,7 @@ var gui = require('nw.gui');
 var path = require('path');
 var http = require('https');
 var lgtv = require('lgtv');
+var tts = require('tts');
 var debug = require('./lib/debug')('App');
 var semver = require('semver');
 var moment = require('moment');
@@ -151,6 +152,12 @@ function lgfloat(title, text) {
             });
         }
     });
+}
+
+// Speak messages trough TTS on OS X
+// Usage: say('Message Text');
+function say(text) {
+	tts(text);
 }
 
 /**
@@ -418,6 +425,7 @@ function getMessages() {
 			setTimeout(function() {
 				notify(title, message.message, url, iconPath, true);
 				lgfloat(title, message.message);
+				say(message.message);
 			}, notifyTimeout * index);
 		});
 		// Acknowledge receiving messages
