@@ -17,7 +17,8 @@
     "request": "^2.48.0",
     "semver": "^4.1.0",
     "ws": "^0.6.2",
-    "lgtv": "^0.2.2"
+    "lgtv": "^0.2.2",
+    "tts":"^0.1.0"
   },
   "window": {
     "title": "Pullover",
