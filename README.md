@@ -3,7 +3,7 @@
 
 My fork with support for diplaying Pushover Messages on a LG TV with WebOS.
 
-In this file: https://github.com/spambus/Pullover/blob/master/src/js/app.js
+In this file on line 143: https://github.com/spambus/Pullover/blob/master/src/js/app.js
 
 You need to change the ip address to the ip address of your LG TV in your lan/wifi network.
 
