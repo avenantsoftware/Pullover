@@ -1,7 +1,7 @@
 # Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
-My fork with support for diplaying Pushover Messages on a LG TV with WebOS and speakking the messages trough TTS, the TTS support only works on OS X, WebOS support works on all platforms.
+My fork with support for diplaying Pushover Messages on a LG TV with WebOS and speaking the messages trough TTS, the TTS support only works on OS X, WebOS support works on all platforms.
 
 In this file on line 143: https://github.com/spambus/Pullover/blob/master/src/js/app.js
 
