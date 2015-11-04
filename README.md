@@ -1,6 +1,12 @@
 # Pullover
 *The unofficial multi-platform Pushover desktop client.*
 
+My fork with support for diplaying Pushover Messages on a LG TV with WebOS.
+
+In this file: https://github.com/spambus/Pullover/blob/master/src/js/app.js
+
+You need to change the ip address to the ip address of your LG TV in your lan/wifi network.
+
 ![Pullover Demo](https://raw.githubusercontent.com/cgrossde/Pullover/master/res/Demo.gif)
 
 ## Why was this App created?
@@ -14,15 +20,6 @@ I discovered Pushover in mid November 2014 and was really excited. The only thin
 ## Installation / Download
 
 Goto [Pushover.net](https://pushover.net/licensing) and get a desktop license (there is a trial period if you want to try it out first). **Without this license Pullover will not work.**
-
-
-* **Windows x32 (v0.3.2):** [Pullover_0.3.2_Installer.exe](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2_Installer.exe/download)
-* **Mac OS 10.8+ x64 (v0.3.2):** [Pullover_0.3.2.dmg](https://sourceforge.net/projects/pullover/files/0.3.2/Pullover_0.3.2.dmg/download)
-* **Linux:** Can be found under [releases](https://github.com/cgrossde/Pullover/releases/tag/v0.3.2)
-
-**Installation on Linux:** Please refer to this wiki article [wiki/Installing-on-Linux](https://github.com/cgrossde/Pullover/wiki/Installing-on-Linux)
-
-**Please note:** If the app doesn't work for you, don't hesitate to open an issue [here](https://github.com/cgrossde/Pullover/issues). I usually test Pullover on Mac and Windows before publishing a new version, however if I miss something just contact me. Please add the log file (see section *Bugs* bellow).
 
 ## Build your own
 You can create builds for all platforms with Mac OS, take a look at [CROSSPLATFORM.md](CROSSPLATFORM.md) to find out about necessary dependencies.
