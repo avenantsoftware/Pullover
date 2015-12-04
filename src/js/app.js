@@ -41,8 +41,6 @@ var connectionStatus = obs.prop(CONN_DISCONNECTED);
 connectionStatus.subscribe(updateSyncStatus);
 var reconnectCountdown = null;
 
-var iconFile;
-
 // Get the minimize event
 win.on('minimize', hideWindow);
 
@@ -142,21 +140,6 @@ function notify(title, text, url, iconPath) {
 	}
 }
 
-// Show float message on LG Webos TV function
-// Usage: lgtoast('Message Title', 'iconData'); where iconData is a base64 encoded string of a png image
-function lgtoast(text, iconData) {
-	//if(localStorage.newNotifier === 'false') {
-    lgtv.connect("192.168.2.6", function(err, response) {
-        if (!err) {
-            lgtv.show_float(text, iconData, function(err, response) {
-            if (!err) {
-                lgtv.disconnect();
-                }
-            });
-        }
-    });
-}
-
 // Speak messages trough TTS on OS X
 // Usage: say('Message Text');
 function say(text) {
@@ -189,25 +172,6 @@ function nativeNotify(title, text, url, iconPath, retryOnError) {
 			gui.Shell.openExternal(url);
 		};
 	}
-	
-	// get message icon from pushover site
-	request.get({url: iconPath, encoding: 'binary'}, function (err, response, body) {
-		fs.exists(iconFile + '.png', function(exists) {
-			if (!exists) {
-				// store message icon 
-				fs.writeFile(iconFile + '.png', body, 'binary', function(err) {
-            		if(err) {
-            			console.log(err);
-            		}
-		        }); 
-            }
-        });
-	});
-
-	// convert stored message icon to base64
-        var iconData = base64_encode(iconFile +'.png');
-
-	lgtoast(text, iconData);
 }
 
 function showLogin() {
@@ -455,7 +419,32 @@ function getMessages() {
 			iconFile = message.icon;
 			setTimeout(function() {
 				notify(title, message.message, url, iconPath, true);
-				lgfloat(title, message.message);
+				// get message icon from pushover site
+				request.get({url: iconPath, encoding: 'binary'}, function (err, response, body) {
+					fs.exists(message.icon + '.png', function(exists) {
+						if (!exists) {
+							// save message icon 
+							fs.writeFile(message.icon + '.png', body, 'binary', function(err) {
+			            		if(err) {
+			            			console.log(err);
+			            		}
+					        }); 
+			            }
+			        });
+				});
+
+				// convert stored message icon to base64
+			        var iconData = base64_encode(message.icon +'.png');
+			        // send message to LG webOS TV
+				lgtv.connect("192.168.2.6", function(err, response) {
+			            if (!err) {
+			                lgtv.show_float(message.message, iconData, true, function(err, response) {
+			                if (!err) {
+			                    lgtv.disconnect();
+			                    }
+			                });
+			            }
+			        });
 				say(message.message);
 			}, notifyTimeout * index);
 		});
