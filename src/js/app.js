@@ -41,6 +41,8 @@ var connectionStatus = obs.prop(CONN_DISCONNECTED);
 connectionStatus.subscribe(updateSyncStatus);
 var reconnectCountdown = null;
 
+var iconFile;
+
 // Get the minimize event
 win.on('minimize', hideWindow);
 
@@ -141,11 +143,12 @@ function notify(title, text, url, iconPath) {
 }
 
 // Show float message on LG Webos TV function
-// Usage: lgfloat('Message Title', 'Message Text');
-function lgfloat(title, text) {
+// Usage: lgtoast('Message Title', 'iconData'); where iconData is a base64 encoded string of a png image
+function lgtoast(text, iconData) {
+	//if(localStorage.newNotifier === 'false') {
     lgtv.connect("192.168.2.6", function(err, response) {
         if (!err) {
-            lgtv.show_float(title + " - " + text, function(err, response) {
+            lgtv.show_float(text, iconData, function(err, response) {
             if (!err) {
                 lgtv.disconnect();
                 }
@@ -186,6 +189,25 @@ function nativeNotify(title, text, url, iconPath, retryOnError) {
 			gui.Shell.openExternal(url);
 		};
 	}
+	
+	// get message icon from pushover site
+	request.get({url: iconPath, encoding: 'binary'}, function (err, response, body) {
+		fs.exists(iconFile + '.png', function(exists) {
+			if (!exists) {
+				// store message icon 
+				fs.writeFile(iconFile + '.png', body, 'binary', function(err) {
+            		if(err) {
+            			console.log(err);
+            		}
+		        }); 
+            }
+        });
+	});
+
+	// convert stored message icon to base64
+        var iconData = base64_encode(iconFile +'.png');
+
+	lgtoast(text, iconData);
 }
 
 function showLogin() {
@@ -397,6 +419,14 @@ function setStatusOnline() {
 							.addClass('glyphicon-signal');
 }
 
+// function to encode file data to base64 encoded string
+function base64_encode(file) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+}
+
 function getMessages() {
 	debug.log('getMessages - try request');
 	openClient.fetchNotifications()
@@ -422,6 +452,7 @@ function getMessages() {
 			var title = message.title || message.app;
 			var url = (message.url) ? message.url : null;
 			var iconPath = 'https://api.pushover.net/icons/' + message.icon + '.png';
+			iconFile = message.icon;
 			setTimeout(function() {
 				notify(title, message.message, url, iconPath, true);
 				lgfloat(title, message.message);
